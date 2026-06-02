@@ -3,9 +3,11 @@ from jose import jwt
 from jose import JWTError
 
 
-SECRET_KEY = "your-secret-key"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+from app.settings import (
+    SECRET_KEY,
+    ALGORITHM,
+    ACCESS_TOKEN_EXPIRE_MINUTES
+)
 
 
 def create_access_token(data: dict):
