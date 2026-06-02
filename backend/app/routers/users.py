@@ -61,3 +61,16 @@ def get_me(
         "username": current_user.username,
         "email": current_user.email
     }
+
+@router.get("/my-tasks")
+def my_tasks(
+    current_user: User = Depends(get_current_user)
+):
+
+    return [
+        {
+            "title": task.title,
+            "description": task.description
+        }
+        for task in current_user.tasks
+    ]

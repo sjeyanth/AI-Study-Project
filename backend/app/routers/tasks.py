@@ -77,3 +77,22 @@ def delete_task(
         task_id,
         db
     )
+
+
+@router.get("/tasks/{task_id}/owner")
+def get_task_owner(
+    task_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+
+    task = task_service.get_task_by_id(
+        task_id,
+        db,
+        current_user
+    )
+
+    return {
+        "task": task.title,
+        "owner": task.owner.username
+    }
