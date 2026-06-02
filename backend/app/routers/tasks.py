@@ -5,6 +5,8 @@ from app.schemas.task import Task
 from app.schemas.task import TaskResponse
 from app.database.dependencies import get_db
 from app.services import task_service
+from app.database.auth_dependencies import get_current_user
+from app.models.user import User
 
 
 router = APIRouter()
@@ -12,7 +14,8 @@ router = APIRouter()
 
 @router.get("/tasks", response_model=list[TaskResponse])
 def get_tasks(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     return task_service.get_all_tasks(db)

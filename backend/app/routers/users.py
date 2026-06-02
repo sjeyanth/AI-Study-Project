@@ -16,6 +16,9 @@ from app.schemas.user import (
 
 from app.services import user_service
 
+from app.database.auth_dependencies import get_current_user
+from app.models.user import User
+
 
 router = APIRouter()
 
@@ -45,3 +48,15 @@ def login_user(
         db,
         user
     )
+
+
+@router.get("/me")
+def get_me(
+    current_user: User = Depends(get_current_user)
+):
+
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "email": current_user.email
+    }
