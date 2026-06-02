@@ -20,9 +20,9 @@ def get_current_user(
     db: Session = Depends(get_db)
 ):
 
-    username = verify_access_token(
-        token
-    )
+    print("TOKEN RECEIVED:", token)
+
+    username = verify_access_token(token)
 
     if username is None:
 

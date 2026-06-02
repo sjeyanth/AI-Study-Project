@@ -18,6 +18,7 @@ from app.services import user_service
 
 from app.database.auth_dependencies import get_current_user
 from app.models.user import User
+from fastapi.security import OAuth2PasswordRequestForm
 
 
 router = APIRouter()
@@ -40,13 +41,13 @@ def register_user(
 
 @router.post("/login")
 def login_user(
-    user: UserLogin,
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
 
     return user_service.login_user(
         db,
-        user
+        form_data
     )
 
 

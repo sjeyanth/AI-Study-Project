@@ -9,6 +9,7 @@ from app.database.auth_dependencies import get_current_user
 from app.models.user import User
 
 
+
 router = APIRouter()
 
 
@@ -18,30 +19,34 @@ def get_tasks(
     current_user: User = Depends(get_current_user)
 ):
 
-    return task_service.get_all_tasks(db)
+    return task_service.get_all_tasks(db, current_user)
 
 
 @router.get("/tasks/{task_id}", response_model=TaskResponse)
 def get_task(
     task_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     return task_service.get_task_by_id(
         task_id,
-        db
+        db,
+        current_user
     )
 
 
 @router.post("/tasks", response_model=TaskResponse)
 def create_task(
     task: Task,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     return task_service.create_task(
         db,
-        task
+        task,
+        current_user
     )
 
 
@@ -49,20 +54,23 @@ def create_task(
 def update_task(
     task_id: int,
     updated_task: Task,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     return task_service.update_task(
         task_id,
         updated_task,
-        db
+        db,
+        current_user    
     )
 
 
 @router.delete("/tasks/{task_id}")
 def delete_task(
     task_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     return task_service.delete_task(

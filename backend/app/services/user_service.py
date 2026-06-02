@@ -8,6 +8,7 @@ from app.core.security import hash_password
 from app.core.security import verify_password
 from app.core.auth import create_access_token
 from app.schemas.user import UserLogin
+from fastapi.security import OAuth2PasswordRequestForm
 
 
 def create_user(
@@ -57,11 +58,11 @@ def create_user(
 
 def login_user(
     db: Session,
-    user: UserLogin
+    form_data: OAuth2PasswordRequestForm 
 ):
 
     existing_user = db.query(User).filter(
-        User.username == user.username
+        User.username == form_data.username
     ).first()
 
     if not existing_user:
@@ -72,7 +73,7 @@ def login_user(
         )
 
     if not verify_password(
-        user.password,
+        form_data.password,
         existing_user.hashed_password
     ):
 

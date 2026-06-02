@@ -2,17 +2,21 @@ from sqlalchemy.orm import Session
 from app.models.task import Task as TaskModel
 from app.schemas.task import Task
 from fastapi import HTTPException
+from app.models.user import User
 
 
 def create_task(
     db: Session,
-    task: Task
+    task: Task,
+    current_user: User
+
 ):
 
     new_task = TaskModel(
         title=task.title,
         description=task.description,
-        completed=task.completed
+        completed=task.completed,
+        user_id=current_user.id
     )
 
     db.add(new_task)
@@ -26,25 +30,30 @@ def create_task(
 
 
 def get_all_tasks(
-    db: Session
+    db: Session,
+    current_user: User
 ):
 
     return db.query(
         TaskModel
-    ).all()
+    ).filter(
+    TaskModel.user_id == current_user.id
+).all()
 
 
 
 def get_task_by_id(
     task_id: int,
-    db: Session
+    db: Session,
+    current_user: User 
 ):
 
     task = db.query(
-        TaskModel
-    ).filter(
-        TaskModel.id == task_id
-    ).first()
+    TaskModel
+).filter(
+    TaskModel.id == task_id,
+    TaskModel.user_id == current_user.id
+).first()
 
     if task is None:
 
@@ -59,11 +68,13 @@ def get_task_by_id(
 def update_task(
     task_id: int,
     updated_task: Task,
-    db: Session
+    db: Session,
+    current_user: User
 ):
 
     task = db.query(TaskModel).filter(
-        TaskModel.id == task_id
+        TaskModel.id == task_id,
+        TaskModel.user_id == current_user.id        
     ).first()
 
     if task is None:
@@ -86,13 +97,15 @@ def update_task(
 
 def delete_task(
     task_id: int,
-    db: Session
+    db: Session,
+    current_user: User
 ):
 
     task = db.query(
         TaskModel
     ).filter(
-        TaskModel.id == task_id
+        TaskModel.id == task_id,
+        TaskModel.user_id == current_user.id
     ).first()
 
     if task is None:

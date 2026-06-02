@@ -11,5 +11,6 @@ class Task(Base):
 
     description = Column(String, nullable=True)
 
-    
     completed = Column(Boolean, default=False)
+
+    user_id = Column(Integer, ForeignKey("users.id"))
