@@ -16,6 +16,16 @@ class User(Base):
     hashed_password = Column(String)
 
     tasks = relationship(
-    "Task",
-    back_populates="owner"
-)
+        "Task",
+        back_populates="owner"
+    )
+
+    notes = relationship(
+        "Note",
+        back_populates="owner"
+    )
+
+    reminders = relationship(
+        "Reminder",
+        back_populates="owner"
+    )
