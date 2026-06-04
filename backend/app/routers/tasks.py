@@ -75,7 +75,8 @@ def delete_task(
 
     return task_service.delete_task(
         task_id,
-        db
+        db,
+        current_user
     )
 
 
