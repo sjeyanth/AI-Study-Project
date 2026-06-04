@@ -6,6 +6,8 @@ from sqlalchemy import pool
 from alembic import context
 
 from app.database.database import Base
+from app.models.budget import Budget
+from app.models.expense import Expense
 from app.models.note import Note
 from app.models.reminder import Reminder
 from app.models.task import Task

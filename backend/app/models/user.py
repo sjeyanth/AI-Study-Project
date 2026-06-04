@@ -29,3 +29,13 @@ class User(Base):
         "Reminder",
         back_populates="owner"
     )
+
+    budgets = relationship(
+        "Budget",
+        back_populates="owner"
+    )
+
+    expenses = relationship(
+        "Expense",
+        back_populates="owner"
+    )

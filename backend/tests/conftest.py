@@ -193,3 +193,54 @@ def test_reminder(auth_user):
         "reminder": reminder,
         "user": auth_user
     }
+
+
+@pytest.fixture
+def test_budget(auth_user):
+
+    response = client.post(
+        "/budgets",
+        json={
+            "month": 6,
+            "year": 2026,
+            "total_budget": 25000.0,
+            "currency": "INR"
+        },
+        headers={
+            "Authorization":
+            f"Bearer {auth_user['token']}"
+        }
+    )
+
+    budget = response.json()
+
+    return {
+        "budget": budget,
+        "user": auth_user
+    }
+
+
+@pytest.fixture
+def test_expense(auth_user):
+
+    response = client.post(
+        "/expenses",
+        json={
+            "title": "Fixture Expense",
+            "amount": 125.5,
+            "expense_date": "2026-06-05T10:00:00Z",
+            "category": "Food",
+            "notes": "Created by fixture"
+        },
+        headers={
+            "Authorization":
+            f"Bearer {auth_user['token']}"
+        }
+    )
+
+    expense = response.json()
+
+    return {
+        "expense": expense,
+        "user": auth_user
+    }
