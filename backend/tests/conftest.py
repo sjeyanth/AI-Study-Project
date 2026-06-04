@@ -143,3 +143,53 @@ def test_task(auth_user):
         "task": task,
         "user": auth_user
     }
+
+
+@pytest.fixture
+def test_note(auth_user):
+
+    response = client.post(
+        "/notes",
+        json={
+            "title": "Fixture Note",
+            "content": "Created by fixture",
+            "tags": "#test"
+        },
+        headers={
+            "Authorization":
+            f"Bearer {auth_user['token']}"
+        }
+    )
+
+    note = response.json()
+
+    return {
+        "note": note,
+        "user": auth_user
+    }
+
+
+@pytest.fixture
+def test_reminder(auth_user):
+
+    response = client.post(
+        "/reminders",
+        json={
+            "title": "Fixture Reminder",
+            "description": "Created by fixture",
+            "tags": "#test",
+            "due_date": None,
+            "completed": False
+        },
+        headers={
+            "Authorization":
+            f"Bearer {auth_user['token']}"
+        }
+    )
+
+    reminder = response.json()
+
+    return {
+        "reminder": reminder,
+        "user": auth_user
+    }
