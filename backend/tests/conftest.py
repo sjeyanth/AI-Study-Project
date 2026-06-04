@@ -2,10 +2,6 @@ import sys
 import os
 import uuid
 
-import pytest
-
-from fastapi.testclient import TestClient
-
 sys.path.insert(
     0,
     os.path.abspath(
@@ -16,9 +12,57 @@ sys.path.insert(
     )
 )
 
+import pytest
+
+from fastapi.testclient import TestClient
+
+from tests.database import (
+    TestingSessionLocal
+)
+
+from app.database.dependencies import (
+    get_db
+)
+
 from app.main import app
 
+from app.database.database import Base
+from tests.database import engine
+    
+
+
+@pytest.fixture(
+    scope="session",
+    autouse=True
+)
+def setup_database():
+
+    Base.metadata.create_all(
+        bind=engine
+    )
+
+    yield
+
+    Base.metadata.drop_all(
+        bind=engine
+    )
+
+def override_get_db():
+
+    print("USING TEST DATABASE")
+
+    db = TestingSessionLocal()
+
+    try:
+        yield db
+
+    finally:
+        db.close()
+
+app.dependency_overrides[get_db] = override_get_db
+
 client = TestClient(app)
+
 
 
 def _register_and_login():
