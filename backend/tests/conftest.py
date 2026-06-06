@@ -244,3 +244,29 @@ def test_expense(auth_user):
         "expense": expense,
         "user": auth_user
     }
+
+
+@pytest.fixture
+def test_goal(auth_user):
+
+    response = client.post(
+        "/goals",
+        json={
+            "title": "Fixture Goal",
+            "description": "Created by fixture",
+            "target_date": "2026-07-01T00:00:00Z",
+            "status": "in_progress",
+            "progress": 25
+        },
+        headers={
+            "Authorization":
+            f"Bearer {auth_user['token']}"
+        }
+    )
+
+    goal = response.json()
+
+    return {
+        "goal": goal,
+        "user": auth_user
+    }
