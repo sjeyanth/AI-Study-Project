@@ -6,6 +6,8 @@ from app.routers.notes import router as notes_router
 from app.routers.reminders import router as reminders_router
 from app.routers.tasks import router as tasks_router
 from app.routers.users import router as users_router
+from app.schemas.dashboard import DashboardResponse
+from app.routers.dashboard import router as dashboard_router
 
 
 app = FastAPI()
@@ -17,7 +19,7 @@ app.include_router(reminders_router)
 app.include_router(budgets_router)
 app.include_router(expenses_router)
 app.include_router(goals_router)
-
+app.include_router(dashboard_router)
 
 @app.get("/")
 def root():
