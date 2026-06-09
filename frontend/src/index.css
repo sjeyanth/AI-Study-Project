@@ -33,7 +33,9 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -91,7 +93,11 @@ a {
   font-weight: 600;
 }
 
-.field input {
+.field input,
+.field select,
+.field textarea,
+.search-input,
+.filter-select {
   width: 100%;
   min-height: 44px;
   padding: 10px 12px;
@@ -101,7 +107,15 @@ a {
   background: var(--surface);
 }
 
-.field input:focus {
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.search-input:focus,
+.filter-select:focus {
   border-color: var(--primary);
   outline: 3px solid rgba(37, 99, 235, 0.16);
 }
@@ -247,6 +261,21 @@ a {
   font-weight: 700;
 }
 
+.ghost-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.danger-button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(180, 35, 24, 0.28);
+  border-radius: 6px;
+  color: var(--danger);
+  background: rgba(180, 35, 24, 0.06);
+  font-weight: 700;
+}
+
 .content {
   padding: 28px;
 }
@@ -266,6 +295,173 @@ a {
 .page-header p {
   margin: 0;
   color: var(--text-muted);
+}
+
+.resource-header {
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  align-items: end;
+}
+
+.resource-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.resource-form,
+.resource-card,
+.resource-state {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
+}
+
+.resource-form {
+  position: sticky;
+  top: 88px;
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+}
+
+.resource-form h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.form-actions,
+.resource-actions,
+.resource-toolbar,
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.resource-list {
+  display: grid;
+  gap: 14px;
+}
+
+.resource-toolbar {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.resource-toolbar .search-input {
+  flex: 1 1 220px;
+}
+
+.resource-toolbar .filter-select {
+  flex: 0 1 180px;
+}
+
+.resource-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.resource-card-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.resource-card h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.resource-card p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.status-pill {
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: #92400e;
+  background: #fef3c7;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.status-success {
+  color: var(--success);
+  background: rgba(4, 120, 87, 0.1);
+}
+
+.goal-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.progress-track {
+  overflow: hidden;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-muted);
+}
+
+.progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+}
+
+.resource-state {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  color: var(--text-muted);
+}
+
+.resource-state strong {
+  color: var(--text);
+}
+
+.resource-state p {
+  margin: 0;
+}
+
+.resource-state-error {
+  border-color: rgba(180, 35, 24, 0.22);
+  color: var(--danger);
+  background: rgba(180, 35, 24, 0.06);
+}
+
+.pagination-bar {
+  justify-content: flex-end;
+  color: var(--text-muted);
+  font-weight: 700;
 }
 
 .dashboard-sections {
@@ -375,7 +571,7 @@ a {
   }
 
   .nav-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .navbar {
@@ -391,5 +587,20 @@ a {
   .dashboard-card-grid,
   .dashboard-card-grid-compact {
     grid-template-columns: 1fr;
+  }
+
+  .resource-header,
+  .resource-layout,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-form {
+    position: static;
+  }
+
+  .resource-card-main,
+  .goal-meta {
+    flex-direction: column;
   }
 }
