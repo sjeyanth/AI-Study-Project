@@ -1,4 +1,8 @@
 from fastapi import FastAPI
+
+from fastapi.middleware.cors import CORSMiddleware
+
+
 from app.routers.budgets import router as budgets_router
 from app.routers.expenses import router as expenses_router
 from app.routers.goals import router as goals_router
@@ -11,6 +15,18 @@ from app.routers.dashboard import router as dashboard_router
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 
 app.include_router(tasks_router)
 app.include_router(users_router)
