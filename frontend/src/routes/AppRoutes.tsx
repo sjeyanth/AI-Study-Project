@@ -1,9 +1,11 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { AppLayout } from '../components/AppLayout'
+import { Budgets } from '../pages/Budgets'
 import { GuestRoute } from '../components/GuestRoute'
 import { ProtectedRoute } from '../components/ProtectedRoute'
 import { Dashboard } from '../pages/Dashboard'
+import { Expenses } from '../pages/Expenses'
 import { Goals } from '../pages/Goals'
 import { Login } from '../pages/Login'
 import { Notes } from '../pages/Notes'
@@ -27,6 +29,8 @@ export function AppRoutes() {
           <Route path="/goals" element={<Goals />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/reminders" element={<Reminders />} />
+          <Route path="/budgets" element={<Budgets />} />
+          <Route path="/expenses" element={<Expenses />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Route>

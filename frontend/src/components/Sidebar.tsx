@@ -23,6 +23,12 @@ export function Sidebar() {
         <NavLink className="nav-link" to="/reminders">
           Reminders
         </NavLink>
+        <NavLink className="nav-link" to="/budgets">
+          Budgets
+        </NavLink>
+        <NavLink className="nav-link" to="/expenses">
+          Expenses
+        </NavLink>
       </nav>
     </aside>
   )
