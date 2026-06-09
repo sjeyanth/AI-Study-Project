@@ -17,6 +17,12 @@ export function Sidebar() {
         <NavLink className="nav-link" to="/goals">
           Goals
         </NavLink>
+        <NavLink className="nav-link" to="/notes">
+          Notes
+        </NavLink>
+        <NavLink className="nav-link" to="/reminders">
+          Reminders
+        </NavLink>
       </nav>
     </aside>
   )

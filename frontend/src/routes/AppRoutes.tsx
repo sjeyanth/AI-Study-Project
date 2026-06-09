@@ -6,8 +6,10 @@ import { ProtectedRoute } from '../components/ProtectedRoute'
 import { Dashboard } from '../pages/Dashboard'
 import { Goals } from '../pages/Goals'
 import { Login } from '../pages/Login'
+import { Notes } from '../pages/Notes'
 import { NotFound } from '../pages/NotFound'
 import { Register } from '../pages/Register'
+import { Reminders } from '../pages/Reminders'
 import { Tasks } from '../pages/Tasks'
 
 export function AppRoutes() {
@@ -23,6 +25,8 @@ export function AppRoutes() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/goals" element={<Goals />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/reminders" element={<Reminders />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Route>

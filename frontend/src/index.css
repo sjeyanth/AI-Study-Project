@@ -398,6 +398,25 @@ a {
   color: var(--text-muted);
 }
 
+.note-preview {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  white-space: pre-line;
+}
+
+.tag-list {
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: var(--surface-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .status-pill {
   flex: 0 0 auto;
   padding: 5px 10px;
@@ -571,7 +590,7 @@ a {
   }
 
   .nav-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   }
 
   .navbar {
