@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
+import { getLoginErrorMessage } from '../api/errors'
 import { useAuth } from '../context/useAuth'
 
 type LocationState = {
@@ -27,8 +28,8 @@ export function Login() {
       await login({ username, password })
       const state = location.state as LocationState | null
       navigate(state?.from?.pathname ?? '/dashboard', { replace: true })
-    } catch {
-      setError('Invalid username or password.')
+    } catch (error) {
+      setError(getLoginErrorMessage(error))
     } finally {
       setIsSubmitting(false)
     }
