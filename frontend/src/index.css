@@ -398,9 +398,174 @@ a {
   color: var(--text-muted);
 }
 
+.ai-page-header {
+  margin-bottom: 20px;
+}
+
+.ai-workspace {
+  display: grid;
+  gap: 20px;
+}
+
+.assistant-chat-card,
+.ai-tool-card {
+  display: grid;
+  gap: 16px;
+}
+
+.assistant-chat-panel {
+  display: grid;
+  gap: 12px;
+  min-height: 280px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.04), transparent 40%), var(--surface);
+}
+
+.assistant-message-list {
+  display: grid;
+  gap: 12px;
+}
+
+.assistant-message-row {
+  display: flex;
+}
+
+.assistant-message-row-user {
+  justify-content: flex-end;
+}
+
+.assistant-message-row-assistant {
+  justify-content: flex-start;
+}
+
+.assistant-message-bubble {
+  max-width: min(640px, 85%);
+  padding: 12px 14px;
+  border-radius: 16px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.assistant-message-bubble-user {
+  color: #ffffff;
+  background: var(--primary);
+  border-bottom-right-radius: 4px;
+}
+
+.assistant-message-bubble-assistant {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-bottom-left-radius: 4px;
+}
+
+.assistant-empty-state {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-height: 180px;
+  padding: 12px;
+}
+
+.assistant-empty-state strong {
+  font-size: 16px;
+}
+
+.assistant-empty-state p,
+.ai-empty-copy {
+  color: var(--text-muted);
+}
+
+.assistant-quick-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.assistant-quick-prompt {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 700;
+}
+
+.assistant-loading {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.assistant-chat-form,
+.ai-tool-form {
+  display: grid;
+  gap: 14px;
+}
+
+.ai-result-panel {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+}
+
+.ai-result-panel h3 {
+  margin: 0;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ai-result-panel p {
+  margin: 0;
+}
+
+.ai-preformatted {
+  margin: 0;
+  white-space: pre-wrap;
+  color: var(--text);
+}
+
+.ai-list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.ai-tool-card {
+  min-height: 100%;
+}
+
+.ai-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 960px) {
+  .ai-tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .ai-tools-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .assistant-message-bubble {
+    max-width: 92%;
+  }
+}
+
 .note-preview {
   display: -webkit-box;
   overflow: hidden;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   white-space: pre-line;

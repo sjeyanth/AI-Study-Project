@@ -29,6 +29,9 @@ export function Sidebar() {
         <NavLink className="nav-link" to="/expenses">
           Expenses
         </NavLink>
+        <NavLink className="nav-link" to="/ai-tools">
+          AI Tools
+        </NavLink>
       </nav>
     </aside>
   )

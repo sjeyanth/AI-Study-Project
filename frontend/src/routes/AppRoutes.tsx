@@ -14,6 +14,8 @@ import { Register } from '../pages/Register'
 import { Reminders } from '../pages/Reminders'
 import { Tasks } from '../pages/Tasks'
 
+import { AIToolsPage } from '../pages/AIToolspage'
+
 export function AppRoutes() {
   return (
     <Routes>
@@ -31,6 +33,7 @@ export function AppRoutes() {
           <Route path="/reminders" element={<Reminders />} />
           <Route path="/budgets" element={<Budgets />} />
           <Route path="/expenses" element={<Expenses />} />
+          <Route path="/ai-tools" element={<AIToolsPage />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Route>
