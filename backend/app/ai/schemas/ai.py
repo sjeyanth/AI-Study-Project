@@ -63,3 +63,5 @@ class BudgetInsightsRequest(BaseModel):
 
 class BudgetInsightsResponse(BaseModel):
     insights: str
+
+
