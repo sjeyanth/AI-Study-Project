@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 
+import { sendMessage } from '../../api/assistantApi'
+
 type ChatRole = 'user' | 'assistant'
 
 type ChatMessage = {
@@ -8,52 +10,45 @@ type ChatMessage = {
   content: string
 }
 
-function getAssistantReply(message: string) {
-  const normalizedMessage = message.toLowerCase()
-
-  if (normalizedMessage.includes('summarize') || normalizedMessage.includes('notes')) {
-    return 'I can help summarize notes. Use the Note Summarizer tool below.'
-  }
-
-  if (normalizedMessage.includes('email')) {
-    return 'I can help generate professional emails. Use the Email Generator tool below.'
-  }
-
-  if (normalizedMessage.includes('budget') || normalizedMessage.includes('spending')) {
-    return 'I can help analyze spending. Use the Budget Insights tool below.'
-  }
-
-  if (normalizedMessage.includes('task') || normalizedMessage.includes('goal')) {
-    return 'I can help break down work into steps. Use the Task Breakdown tool below.'
-  }
-
-  return 'I can help with note summaries, email drafts, task plans, and budget analysis. Pick a tool below to continue.'
-}
-
 export function AssistantChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+
   const endOfMessagesRef = useRef<HTMLDivElement | null>(null)
   const nextMessageId = useRef(1)
 
   const hasMessages = messages.length > 0
 
   const quickPrompts = useMemo(
-    () => ['Summarize my notes', 'Generate email', 'Analyze budget'],
+    () => [
+      'Summarize my notes',
+      'Generate email',
+      'Analyze budget',
+      'Help me plan my goal',
+    ],
     []
   )
 
   useEffect(() => {
-    endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    endOfMessagesRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    })
   }, [messages, isLoading])
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault()
 
-    const trimmedMessage = inputValue.trim()
+    const trimmedMessage =
+      inputValue.trim()
 
-    if (!trimmedMessage || isLoading) {
+    if (
+      !trimmedMessage ||
+      isLoading
+    ) {
       return
     }
 
@@ -63,25 +58,58 @@ export function AssistantChat() {
       content: trimmedMessage,
     }
 
-    setMessages((current) => [...current, userMessage])
+    setMessages((current) => [
+      ...current,
+      userMessage,
+    ])
+
     setInputValue('')
-    setIsLoading(true)
 
-    await new Promise((resolve) => {
-      window.setTimeout(resolve, 350)
-    })
+    try {
+      setIsLoading(true)
 
-    const assistantMessage: ChatMessage = {
-      id: nextMessageId.current++,
-      role: 'assistant',
-      content: getAssistantReply(trimmedMessage),
+      const data =
+        await sendMessage(
+          trimmedMessage
+        )
+
+      const assistantMessage: ChatMessage =
+        {
+          id:
+            nextMessageId.current++,
+          role: 'assistant',
+          content:
+            data.response,
+        }
+
+      setMessages((current) => [
+        ...current,
+        assistantMessage,
+      ])
+    } catch (error) {
+      console.error(error)
+
+      const errorMessage: ChatMessage =
+        {
+          id:
+            nextMessageId.current++,
+          role: 'assistant',
+          content:
+            'Unable to connect to assistant.',
+        }
+
+      setMessages((current) => [
+        ...current,
+        errorMessage,
+      ])
+    } finally {
+      setIsLoading(false)
     }
-
-    setMessages((current) => [...current, assistantMessage])
-    setIsLoading(false)
   }
 
-  function handleQuickPrompt(prompt: string) {
+  function handleQuickPrompt(
+    prompt: string
+  ) {
     setInputValue(prompt)
   }
 
@@ -89,63 +117,129 @@ export function AssistantChat() {
     <article className="resource-card assistant-chat-card">
       <div className="assistant-chat-header">
         <div>
-          <h2>Assistant Chat</h2>
-          <p>Use chat for guidance, then run a tool below for the actual AI output.</p>
+          <h2>
+            Assistant Chat
+          </h2>
+
+          <p>
+            Ask questions about
+            notes, emails,
+            tasks, goals, or
+            budgets.
+          </p>
         </div>
       </div>
 
-      <div className="assistant-chat-panel" aria-live="polite" aria-label="Assistant chat messages">
+      <div
+        className="assistant-chat-panel"
+        aria-live="polite"
+        aria-label="Assistant chat messages"
+      >
         {!hasMessages ? (
           <div className="assistant-empty-state">
-            <strong>Start a conversation</strong>
-            <p>Ask for help with summaries, emails, goals, or budget analysis.</p>
+            <strong>
+              Start a conversation
+            </strong>
+
+            <p>
+              Ask for help with
+              summaries, emails,
+              goals, or budget
+              analysis.
+            </p>
+
             <div className="assistant-quick-prompts">
-              {quickPrompts.map((prompt) => (
-                <button
-                  key={prompt}
-                  type="button"
-                  className="assistant-quick-prompt"
-                  onClick={() => handleQuickPrompt(prompt)}
-                >
-                  {prompt}
-                </button>
-              ))}
+              {quickPrompts.map(
+                (prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    className="assistant-quick-prompt"
+                    onClick={() =>
+                      handleQuickPrompt(
+                        prompt
+                      )
+                    }
+                  >
+                    {prompt}
+                  </button>
+                )
+              )}
             </div>
           </div>
         ) : (
           <div className="assistant-message-list">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`assistant-message-row assistant-message-row-${message.role}`}
-              >
-                <div className={`assistant-message-bubble assistant-message-bubble-${message.role}`}>
-                  {message.content}
+            {messages.map(
+              (message) => (
+                <div
+                  key={
+                    message.id
+                  }
+                  className={`assistant-message-row assistant-message-row-${message.role}`}
+                >
+                  <div
+                    className={`assistant-message-bubble assistant-message-bubble-${message.role}`}
+                  >
+                    {
+                      message.content
+                    }
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         )}
 
-        {isLoading ? <div className="assistant-loading">Thinking...</div> : null}
-        <div ref={endOfMessagesRef} />
+        {isLoading ? (
+          <div className="assistant-loading">
+            Thinking...
+          </div>
+        ) : null}
+
+        <div
+          ref={
+            endOfMessagesRef
+          }
+        />
       </div>
 
-      <form className="assistant-chat-form" onSubmit={handleSubmit}>
+      <form
+        className="assistant-chat-form"
+        onSubmit={handleSubmit}
+      >
         <div className="field">
-          <label htmlFor="assistant-chat-input">Message</label>
+          <label htmlFor="assistant-chat-input">
+            Message
+          </label>
+
           <textarea
             id="assistant-chat-input"
             rows={3}
             value={inputValue}
-            onChange={(event) => setInputValue(event.target.value)}
+            onChange={(
+              event
+            ) =>
+              setInputValue(
+                event.target
+                  .value
+              )
+            }
             placeholder="Ask for help with notes, email, goals, or budget..."
           />
         </div>
 
         <div className="form-actions">
-          <button className="primary-button" type="submit" disabled={isLoading || !inputValue.trim()}>
-            {isLoading ? 'Sending...' : 'Send'}
+          <button
+            className="primary-button"
+            type="submit"
+            disabled={
+              isLoading ||
+              !inputValue.trim()
+            }
+          >
+            {isLoading
+              ? 'Sending...'
+              : 'Send'}
           </button>
         </div>
       </form>

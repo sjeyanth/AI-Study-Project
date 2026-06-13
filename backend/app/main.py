@@ -13,7 +13,7 @@ from app.routers.users import router as users_router
 from app.schemas.dashboard import DashboardResponse
 from app.routers.dashboard import router as dashboard_router
 from app.ai.routers.ai import router as ai_router
-
+from app.ai.routers.assistant import (router as assistant_router)
 
 app = FastAPI()
 
@@ -38,6 +38,7 @@ app.include_router(expenses_router)
 app.include_router(goals_router)
 app.include_router(dashboard_router)
 app.include_router(ai_router)
+app.include_router(assistant_router)
 @app.get("/")
 def root():
     return {"message": "Backend running successfully!"}
