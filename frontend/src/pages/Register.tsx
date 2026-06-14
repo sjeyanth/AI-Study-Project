@@ -1,85 +1,82 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { useAuth } from '../context/useAuth'
+import {apiClient} from '../api/client'
 
-export function Register() {
-  const navigate = useNavigate()
-  const { register } = useAuth()
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+type RegisterPayload = {
+  username: string
+  email: string
+  password: string
+}
+
+export default function Register() {
+  const [form, setForm] = useState<RegisterPayload>({
+    username: '',
+    email: '',
+    password: '',
+  })
   const [error, setError] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const navigate = useNavigate()
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError('')
-    setIsSubmitting(true)
+    setLoading(true)
 
     try {
-      await register({ username, email, password })
-      navigate('/dashboard', { replace: true })
+      await apiClient.post('/register', form)
+      navigate('/login', { replace: true })
     } catch {
-      setError('Unable to create account. Try another username or email.')
+      setError('Unable to register with these details. Please try again.')
     } finally {
-      setIsSubmitting(false)
+      setLoading(false)
     }
   }
 
   return (
-    <main className="auth-page">
-      <section className="auth-panel" aria-labelledby="register-title">
-        <h1 id="register-title">Create account</h1>
-        <p>Start organizing your work in one place.</p>
+    <section className="auth-page">
+      <form className="auth-card" onSubmit={handleSubmit}>
+        <h1>Register</h1>
 
-        <form className="form-stack" onSubmit={handleSubmit}>
-          {error ? <div className="error-message">{error}</div> : null}
+        <label htmlFor="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          value={form.username}
+          onChange={(event) => setForm((prev) => ({ ...prev, username: event.target.value }))}
+          required
+        />
 
-          <div className="field">
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              autoComplete="username"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-              required
-            />
-          </div>
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          value={form.email}
+          onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
+          required
+        />
 
-          <div className="field">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-          </div>
+        <label htmlFor="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          value={form.password}
+          onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
+          required
+        />
 
-          <div className="field">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-          </div>
+        {error && <p className="error-text">{error}</p>}
 
-          <button className="primary-button" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Creating account...' : 'Create account'}
-          </button>
-        </form>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Creating account...' : 'Register'}
+        </button>
 
-        <div className="auth-switch">
+        <p className="helper-text">
           Already have an account? <Link to="/login">Sign in</Link>
-        </div>
-      </section>
-    </main>
+        </p>
+      </form>
+    </section>
   )
 }

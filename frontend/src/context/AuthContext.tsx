@@ -19,6 +19,8 @@ import {
 } from '../utils/tokenStorage'
 import { AuthContext } from './authContextValue'
 
+
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [token, setToken] = useState<string | null>(() => getStoredToken())
@@ -98,3 +100,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
+
+

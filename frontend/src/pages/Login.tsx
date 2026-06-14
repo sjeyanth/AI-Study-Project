@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { getLoginErrorMessage } from '../api/errors'
 import { useAuth } from '../context/useAuth'
 
 type LocationState = {
@@ -10,72 +9,110 @@ type LocationState = {
   }
 }
 
-export function Login() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { login } = useAuth()
+export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const auth = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const state = location.state as LocationState | null
+
+  const fromPath =
+    state?.from?.pathname ??
+    '/dashboard'
+
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault()
+
     setError('')
-    setIsSubmitting(true)
+    setLoading(true)
 
     try {
-      await login({ username, password })
-      const state = location.state as LocationState | null
-      navigate(state?.from?.pathname ?? '/dashboard', { replace: true })
-    } catch (error) {
-      setError(getLoginErrorMessage(error))
+      await auth.login({
+        username,
+        password,
+      })
+
+      navigate(fromPath, {
+        replace: true,
+      })
+    } catch {
+      setError(
+        'Invalid username or password. Please try again.'
+      )
     } finally {
-      setIsSubmitting(false)
+      setLoading(false)
     }
   }
 
   return (
-    <main className="auth-page">
-      <section className="auth-panel" aria-labelledby="login-title">
-        <h1 id="login-title">Sign in</h1>
-        <p>Access your productivity workspace.</p>
+    <section className="auth-page">
+      <form
+        className="auth-card"
+        onSubmit={handleSubmit}
+      >
+        <h1>Login</h1>
 
-        <form className="form-stack" onSubmit={handleSubmit}>
-          {error ? <div className="error-message">{error}</div> : null}
+        <label htmlFor="username">
+          Username
+        </label>
 
-          <div className="field">
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              autoComplete="username"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-              required
-            />
-          </div>
+        <input
+          id="username"
+          type="text"
+          value={username}
+          onChange={(event) =>
+            setUsername(
+              event.target.value
+            )
+          }
+          required
+        />
 
-          <div className="field">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-          </div>
+        <label htmlFor="password">
+          Password
+        </label>
 
-          <button className="primary-button" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Signing in...' : 'Sign in'}
-          </button>
-        </form>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(event) =>
+            setPassword(
+              event.target.value
+            )
+          }
+          required
+        />
 
-        <div className="auth-switch">
-          New here? <Link to="/register">Create an account</Link>
-        </div>
-      </section>
-    </main>
+        {error && (
+          <p className="error-text">
+            {error}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+        >
+          {loading
+            ? 'Signing in...'
+            : 'Login'}
+        </button>
+
+        <p className="helper-text">
+          New here?{' '}
+          <Link to="/register">
+            Create an account
+          </Link>
+        </p>
+      </form>
+    </section>
   )
 }

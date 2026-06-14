@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom'
 
-export function NotFound() {
+export default function NotFound() {
   return (
-    <main className="not-found">
-      <section>
-        <h1>Page not found</h1>
-        <p>The page you requested does not exist.</p>
-        <Link className="ghost-button" to="/dashboard">
-          Back to dashboard
-        </Link>
-      </section>
-    </main>
+    <section className="page-shell">
+      <h1>Page Not Found</h1>
+      <p>The page you requested does not exist.</p>
+      <Link to="/dashboard" className="primary-link">
+        Go to dashboard
+      </Link>
+    </section>
   )
 }
