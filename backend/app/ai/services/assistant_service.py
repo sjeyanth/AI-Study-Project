@@ -1,4 +1,4 @@
-def chat(message: str) -> str:
+def mock_response(message: str) -> str:
 
     message = message.lower()
 
@@ -44,6 +44,19 @@ def chat(message: str) -> str:
 
     return (
         "I can help with note summaries, email generation, "
-        "task planning, and budget insights. "
-        "What would you like help with?"
+        "task planning and budget insights."
     )
+
+
+def chat(message: str) -> str:
+
+    try:
+        return ask_nemotron(message)
+
+    except Exception as error:
+
+        print(
+            f"Nemotron Error: {error}"
+        )
+
+        return mock_response(message)
