@@ -1,3 +1,8 @@
+from app.ai.services.nemotron_service import ask_nemotron
+
+import traceback
+
+
 def mock_response(message: str) -> str:
 
     message = message.lower()
@@ -53,10 +58,10 @@ def chat(message: str) -> str:
     try:
         return ask_nemotron(message)
 
+
     except Exception as error:
 
-        print(
-            f"Nemotron Error: {error}"
-        )
+        print("=== NEMOTRON ERROR ===")
+        traceback.print_exc()
 
         return mock_response(message)
