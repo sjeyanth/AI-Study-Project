@@ -1,82 +1,85 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import {apiClient} from '../api/client'
+import { useAuth } from '../context/useAuth'
 
-type RegisterPayload = {
-  username: string
-  email: string
-  password: string
-}
-
-export default function Register() {
-  const [form, setForm] = useState<RegisterPayload>({
-    username: '',
-    email: '',
-    password: '',
-  })
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-
+export function Register() {
   const navigate = useNavigate()
+  const { register } = useAuth()
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError('')
-    setLoading(true)
+    setIsSubmitting(true)
 
     try {
-      await apiClient.post('/register', form)
-      navigate('/login', { replace: true })
+      await register({ username, email, password })
+      navigate('/dashboard', { replace: true })
     } catch {
-      setError('Unable to register with these details. Please try again.')
+      setError('Unable to create account. Try another username or email.')
     } finally {
-      setLoading(false)
+      setIsSubmitting(false)
     }
   }
 
   return (
-    <section className="auth-page">
-      <form className="auth-card" onSubmit={handleSubmit}>
-        <h1>Register</h1>
+    <main className="auth-page">
+      <section className="auth-panel" aria-labelledby="register-title">
+        <h1 id="register-title">Create account</h1>
+        <p>Start organizing your work in one place.</p>
 
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          value={form.username}
-          onChange={(event) => setForm((prev) => ({ ...prev, username: event.target.value }))}
-          required
-        />
+        <form className="form-stack" onSubmit={handleSubmit}>
+          {error ? <div className="error-message">{error}</div> : null}
 
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          value={form.email}
-          onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
-          required
-        />
+          <div className="field">
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              autoComplete="username"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              required
+            />
+          </div>
 
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          value={form.password}
-          onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
-          required
-        />
+          <div className="field">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+          </div>
 
-        {error && <p className="error-text">{error}</p>}
+          <div className="field">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
+          </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Creating account...' : 'Register'}
-        </button>
+          <button className="primary-button" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Creating account...' : 'Create account'}
+          </button>
+        </form>
 
-        <p className="helper-text">
+        <div className="auth-switch">
           Already have an account? <Link to="/login">Sign in</Link>
-        </p>
-      </form>
-    </section>
+        </div>
+      </section>
+    </main>
   )
 }

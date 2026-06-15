@@ -1,49 +1,20 @@
-import { Link } from 'react-router-dom'
+import { useAuth } from '../context/useAuth'
 
-type NavbarProps = {
-  isAuthenticated: boolean
-  onLogout: () => void
-  onToggleSidebar: () => void
-}
+export function Navbar() {
+  const { logout, user } = useAuth()
 
-export default function Navbar({
-  isAuthenticated,
-  onLogout,
-  onToggleSidebar,
-}: NavbarProps) {
   return (
     <header className="navbar">
-      {isAuthenticated ? (
-        <button
-          type="button"
-          className="menu-button"
-          onClick={onToggleSidebar}
-          aria-label="Open navigation"
-        >
-          <span />
-          <span />
-          <span />
+      <div className="navbar-title">
+        <strong>Dashboard</strong>
+        <span>Productivity overview</span>
+      </div>
+      <div className="navbar-actions">
+        <span className="user-chip">{user?.username}</span>
+        <button className="ghost-button" type="button" onClick={logout}>
+          Sign out
         </button>
-      ) : (
-        <div style={{ width: 40, height: 40 }} aria-hidden="true" />
-      )}
-
-      <Link to="/dashboard" className="brand">
-        AI Study Project
-      </Link>
-
-      <nav className="navbar-links">
-        {isAuthenticated ? (
-          <button type="button" className="logout-button" onClick={onLogout}>
-            Logout
-          </button>
-        ) : (
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-          </>
-        )}
-      </nav>
+      </div>
     </header>
   )
 }

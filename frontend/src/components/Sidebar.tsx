@@ -1,42 +1,38 @@
-import { Link, useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
-type SidebarProps = {
-  isOpen: boolean
-  onClose: () => void
-}
-
-const navItems = [
-  { to: '/dashboard', label: 'Dashboard' },
-]
-
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const location = useLocation()
-
+export function Sidebar() {
   return (
-    <>
-      <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <h2>Navigation</h2>
-          <button type="button" className="close-sidebar" onClick={onClose}>
-            Close
-          </button>
-        </div>
-
-        <nav>
-          {navItems.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={location.pathname === item.to ? 'active' : ''}
-              onClick={onClose}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </aside>
-
-      {isOpen && <button className="backdrop" type="button" onClick={onClose} aria-label="Close menu" />}
-    </>
+    <aside className="sidebar">
+      <div className="brand">
+        <span className="brand-mark">AI</span>
+        <span>Productivity</span>
+      </div>
+      <nav className="nav-list" aria-label="Primary navigation">
+        <NavLink className="nav-link" to="/dashboard">
+          Dashboard
+        </NavLink>
+        <NavLink className="nav-link" to="/tasks">
+          Tasks
+        </NavLink>
+        <NavLink className="nav-link" to="/goals">
+          Goals
+        </NavLink>
+        <NavLink className="nav-link" to="/notes">
+          Notes
+        </NavLink>
+        <NavLink className="nav-link" to="/reminders">
+          Reminders
+        </NavLink>
+        <NavLink className="nav-link" to="/budgets">
+          Budgets
+        </NavLink>
+        <NavLink className="nav-link" to="/expenses">
+          Expenses
+        </NavLink>
+        <NavLink className="nav-link" to="/ai-tools">
+          AI Tools
+        </NavLink>
+      </nav>
+    </aside>
   )
 }
