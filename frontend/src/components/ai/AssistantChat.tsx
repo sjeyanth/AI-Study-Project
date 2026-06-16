@@ -8,6 +8,7 @@ type ChatMessage = {
   id: number
   role: ChatRole
   content: string
+  timestamp: string
 }
 
 export function AssistantChat() {
@@ -56,6 +57,7 @@ export function AssistantChat() {
       id: nextMessageId.current++,
       role: 'user',
       content: trimmedMessage,
+      timestamp: new Date().toISOString(),
     }
 
     setMessages((current) => [
@@ -80,6 +82,7 @@ export function AssistantChat() {
           role: 'assistant',
           content:
             data.response,
+          timestamp: new Date().toISOString(),
         }
 
       setMessages((current) => [
@@ -96,6 +99,7 @@ export function AssistantChat() {
           role: 'assistant',
           content:
             'Unable to connect to assistant.',
+          timestamp: new Date().toISOString(),
         }
 
       setMessages((current) => [
@@ -112,6 +116,18 @@ export function AssistantChat() {
   ) {
     setInputValue(prompt)
   }
+
+  async function copyMessage(
+  content: string
+) {
+  await navigator.clipboard.writeText(
+    content
+  )
+}
+
+  function clearConversation() {
+  setMessages([])
+}
 
   return (
     <article className="resource-card assistant-chat-card">
@@ -184,6 +200,25 @@ export function AssistantChat() {
                       message.content
                     }
                   </div>
+                  {message.role === 'assistant' && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                    copyMessage(message.content)
+                    }
+                    >
+                      Copy
+                  </button>
+              )}
+                  <small
+                    style={{
+                    display: 'block',
+                    marginTop: '2px',
+                    opacity: 0.7,
+                  }}
+                  >
+                    {message.timestamp}
+                  </small>
                 </div>
               )
             )}
@@ -240,6 +275,12 @@ export function AssistantChat() {
             {isLoading
               ? 'Sending...'
               : 'Send'}
+          </button>
+          <button
+            type="button"
+            onClick={clearConversation}
+          >
+            Clear Chat
           </button>
         </div>
       </form>
