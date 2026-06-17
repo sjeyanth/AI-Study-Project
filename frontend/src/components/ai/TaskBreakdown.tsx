@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from 'react'
 
 import { taskBreakdown } from '../../api/aiApi'
+import type { TaskBreakdownResponse } from '../../types/ai'
 
 export function TaskBreakdown() {
   const [goal, setGoal] = useState('')
-  const [tasks, setTasks] = useState<string[]>([])
+  const [result, setResult] = useState<TaskBreakdownResponse | null>(null)  
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -15,7 +16,7 @@ export function TaskBreakdown() {
 
     try {
       const data = await taskBreakdown(goal)
-      setTasks(data.tasks)
+      setResult(data)
     } catch {
       setError('Unable to generate the task breakdown.')
     } finally {
@@ -54,11 +55,11 @@ export function TaskBreakdown() {
 
       <section className="ai-result-panel" aria-live="polite">
         <h3>Tasks</h3>
-        {tasks.length > 0 ? (
+        {result?.tasks ? (
           <ul className="ai-list">
-            {tasks.map((task, index) => (
-              <li key={`${task}-${index}`}>{task}</li>
-            ))}
+            <div className="result-box">
+              <pre>{result.tasks}</pre>
+            </div>
           </ul>
         ) : (
           <p className="ai-empty-copy">Your generated steps will appear here.</p>

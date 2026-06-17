@@ -19,7 +19,7 @@ export interface TaskBreakdownRequest {
 }
 
 export interface TaskBreakdownResponse {
-  tasks: string[]
+  tasks: string
 }
 
 export interface BudgetInsightsRequest {

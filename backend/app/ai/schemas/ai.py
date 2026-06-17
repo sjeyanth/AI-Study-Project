@@ -46,7 +46,7 @@ class TaskBreakdownRequest(BaseModel):
 
 
 class TaskBreakdownResponse(BaseModel):
-    tasks: list[str]
+    tasks: str
 
 
 # ==========================

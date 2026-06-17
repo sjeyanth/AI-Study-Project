@@ -1,29 +1,72 @@
+from copy import error
+
+from  app.ai.services.note_ai_service import  summarize_notes_with_ai
+from  app.ai.services.email_ai_service import  generate_email_with_ai
+from  app.ai.services.task_breakdown_ai_service import task_breakdown_with_ai
 
 
+def summarize_note(
+    content: str
+):
 
+    try:
 
-def summarize_note(content: str) -> str:
-    return f"Mock Summary: {content[:100]}"
+        return summarize_notes_with_ai(
+            content
+        )
 
-def generate_mail(purpose: str) -> str:
-    return (
-        f"Subject: regarding {purpose}\n\n"
-        f"Dear Recipient \n\n"
-        f"this is a mock email"
-        f" {purpose} \n\n"
-        f"Best regards\n Sender"
-    )
+    except Exception as error:
+
+        print(
+            f"Note AI Error: {error}"
+        )
+
+        return (
+            f"Mock Summary: "
+            f"{content[:100]}"
+        )
+
+def generate_mail(
+    purpose: str
+):
+
+    try:
+
+        return generate_email_with_ai(
+            purpose
+        )
+
+    except Exception as error:
+
+        print(
+            f"Email AI Error: {error}"
+        )
+
+        return (
+            f"Mock Email for: "
+            f"{purpose}"
+        )
 
 def task_breakdown(
         goal: str
-) -> list[str]:
+) -> str:
     
-    return[
-        f"Research {goal}",
-        f"Create plan for {goal}",
-        f"practice {goal}",
-        f"Review progress on {goal}"
-    ]
+    try:
+
+        return task_breakdown_with_ai(
+        goal
+    )
+
+    except Exception as error:
+
+        print(
+        f"Task AI Error: {error}"
+    )
+
+    return (
+        f"Mock Task Breakdown "
+        f"for: {goal}"
+    )
 
 
 def budget_insights(
