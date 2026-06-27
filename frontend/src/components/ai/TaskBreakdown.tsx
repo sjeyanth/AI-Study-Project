@@ -56,11 +56,7 @@ export function TaskBreakdown() {
       <section className="ai-result-panel" aria-live="polite">
         <h3>Tasks</h3>
         {result?.tasks ? (
-          <ul className="ai-list">
-            <div className="result-box">
-              <pre>{result.tasks}</pre>
-            </div>
-          </ul>
+          <div className="task-breakdown-result">{result.tasks}</div>
         ) : (
           <p className="ai-empty-copy">Your generated steps will appear here.</p>
         )}
