@@ -1,6 +1,8 @@
 import { useMemo, useState, type FormEvent } from 'react'
 
-import { generateStudyPlan } from '../api/aiApi'
+import { Link } from 'react-router-dom'
+
+import { createStudyPlan } from '../api/studyPlansApi'
 import { EmptyState } from '../components/EmptyState'
 import type {
   AssignmentDeadlineRequest,
@@ -9,6 +11,7 @@ import type {
   StudySessionLength,
   StudySubjectRequest,
 } from '../types/ai'
+import type { StudyPlan } from '../types/studyPlan'
 
 const sessionLengths: StudySessionLength[] = [30, 45, 60, 90]
 const difficultyLevels: DifficultyLevel[] = ['Easy', 'Medium', 'Hard']
@@ -28,12 +31,14 @@ const createDeadline = (): AssignmentDeadlineRequest => ({
 const todayInputValue = new Date().toISOString().slice(0, 10)
 
 export function StudyPlanner() {
+  const [title, setTitle] = useState('')
   const [subjects, setSubjects] = useState<StudySubjectRequest[]>([createSubject()])
   const [deadlines, setDeadlines] = useState<AssignmentDeadlineRequest[]>([])
   const [availableHours, setAvailableHours] = useState(2)
   const [sessionLength, setSessionLength] = useState<StudySessionLength>(60)
   const [notes, setNotes] = useState('')
-  const [plan, setPlan] = useState<StudyPlannerResponse | null>(null)
+  const [plan, setPlan] = useState<StudyPlan | null>(null)
+  const [successMessage, setSuccessMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -72,12 +77,14 @@ export function StudyPlanner() {
     event.preventDefault()
     setIsLoading(true)
     setError('')
+    setSuccessMessage('')
 
     try {
       const cleanedDeadlines = deadlines.filter(
         (deadline) => deadline.title.trim() && deadline.due_date
       )
-      const data = await generateStudyPlan({
+      const data = await createStudyPlan({
+        title: title.trim() || undefined,
         subjects,
         assignment_deadlines: cleanedDeadlines,
         available_hours_per_day: availableHours,
@@ -86,8 +93,9 @@ export function StudyPlanner() {
       })
 
       setPlan(data)
+      setSuccessMessage('Study plan created successfully and saved.')
     } catch {
-      setError('Unable to generate a study plan. Check your inputs and try again.')
+      setError('Unable to generate and save a study plan. Check your inputs and try again.')
     } finally {
       setIsLoading(false)
     }
@@ -100,6 +108,9 @@ export function StudyPlanner() {
           <h1>Study Planner</h1>
           <p>Build a balanced AI-generated schedule around exams, deadlines, and study time.</p>
         </div>
+        <Link className="ghost-button ai-header-action" to="/study-plans">
+          View Saved Plans
+        </Link>
       </div>
 
       <section className="study-planner-layout">
@@ -107,6 +118,18 @@ export function StudyPlanner() {
           <div>
             <h2>Planning inputs</h2>
             <p>Subjects, dates, study capacity, and preferences.</p>
+          </div>
+
+          <div className="field">
+            <label htmlFor="study-plan-title">Title</label>
+            <input
+              id="study-plan-title"
+              type="text"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              placeholder="Final exam study plan"
+              maxLength={200}
+            />
           </div>
 
           <section className="study-form-section">
@@ -303,9 +326,10 @@ export function StudyPlanner() {
           </div>
 
           {error ? <div className="error-message">{error}</div> : null}
+          {successMessage ? <div className="success-message">{successMessage}</div> : null}
 
           <button className="primary-button" type="submit" disabled={isLoading}>
-            {isLoading ? 'Generating Plan...' : 'Generate Study Plan'}
+            {isLoading ? 'Generating and Saving...' : 'Generate Study Plan'}
           </button>
         </form>
 
@@ -313,10 +337,10 @@ export function StudyPlanner() {
           {isLoading ? (
             <section className="resource-state study-loading-state" aria-live="polite">
               <span className="loading-spinner" />
-              Generating a balanced study plan...
+              Generating and saving a balanced study plan...
             </section>
           ) : plan ? (
-            <StudyPlanResults plan={plan} />
+            <StudyPlanResults plan={plan.weekly_plan_json} />
           ) : (
             <EmptyState
               title="No study plan yet"
@@ -329,7 +353,7 @@ export function StudyPlanner() {
   )
 }
 
-function StudyPlanResults({ plan }: { plan: StudyPlannerResponse }) {
+export function StudyPlanResults({ plan }: { plan: StudyPlannerResponse }) {
   return (
     <div className="study-plan-stack">
       <section className="resource-card">

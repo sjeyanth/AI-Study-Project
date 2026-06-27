@@ -44,3 +44,8 @@ class User(Base):
         "Goal",
         back_populates="owner"
     )
+
+    study_plans = relationship(
+        "StudyPlan",
+        back_populates="owner"
+    )

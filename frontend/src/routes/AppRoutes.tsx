@@ -13,6 +13,7 @@ import { NotFound } from '../pages/NotFound'
 import { Register } from '../pages/Register'
 import { Reminders } from '../pages/Reminders'
 import { StudyPlanner } from '../pages/StudyPlanner'
+import { StudyPlans } from '../pages/StudyPlans'
 import { Tasks } from '../pages/Tasks'
 
 import { AIToolsPage } from '../pages/AIToolspage'
@@ -36,6 +37,7 @@ export function AppRoutes() {
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/ai-tools" element={<AIToolsPage />} />
           <Route path="/study-planner" element={<StudyPlanner />} />
+          <Route path="/study-plans" element={<StudyPlans />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Route>

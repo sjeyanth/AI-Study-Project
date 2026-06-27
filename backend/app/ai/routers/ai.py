@@ -1,7 +1,7 @@
 from urllib import request
 
 from fastapi import APIRouter, Depends
-from app.ai.services.ai_service import summarize_note, generate_mail, task_breakdown, budget_insights, study_planner
+from app.ai.services.ai_service import summarize_note, generate_mail, task_breakdown, budget_insights
 
 
 from sqlalchemy.orm import Session
@@ -20,9 +20,7 @@ from app.ai.schemas.ai import (
     TaskBreakdownRequest,
     TaskBreakdownResponse,
     BudgetInsightsRequest,
-    BudgetInsightsResponse,
-    StudyPlannerRequest,
-    StudyPlannerResponse
+    BudgetInsightsResponse
 )
 
 router =APIRouter(prefix="/ai", tags=["AI"])
@@ -86,17 +84,3 @@ def budget_insights_route(
     return {
         "insights": insights
     }
-
-
-@router.post(
-    "/study-planner",
-    response_model=StudyPlannerResponse
-)
-def study_planner_route(
-    request: StudyPlannerRequest,
-    current_user: User = Depends(get_current_user)
-):
-
-    return study_planner(
-        request
-    )

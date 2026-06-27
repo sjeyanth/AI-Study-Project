@@ -35,6 +35,9 @@ export function Sidebar() {
         <NavLink className="nav-link" to="/study-planner">
           Study Planner
         </NavLink>
+        <NavLink className="nav-link" to="/study-plans">
+          Study Plans
+        </NavLink>
       </nav>
     </aside>
   )

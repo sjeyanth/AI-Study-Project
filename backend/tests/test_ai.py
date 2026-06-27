@@ -53,26 +53,6 @@ def test_budget_insights_requires_auth():
     assert response.status_code == 401
 
 
-def test_study_planner_requires_auth():
-
-    response = client.post(
-        "/ai/study-planner",
-        json={
-            "subjects": [
-                {
-                    "name": "Database Systems",
-                    "exam_date": "2026-07-10",
-                    "difficulty": "Hard"
-                }
-            ],
-            "available_hours_per_day": 2,
-            "preferred_session_length": 60
-        }
-    )
-
-    assert response.status_code == 401
-
-
 # ==========================
 # Summarize Note
 # ==========================
