@@ -35,7 +35,8 @@ def ask_nemotron(message: str) -> str:
 
 
 def ask_nemotron_simple(
-    prompt: str
+    prompt: str,
+    max_tokens: int = 200
 ) -> str:
 
     response = client.chat.completions.create(
@@ -47,7 +48,7 @@ def ask_nemotron_simple(
             }
         ],
         temperature=0.3,
-        max_tokens=200,
+        max_tokens=max_tokens,
     )
 
     return response.choices[0].message.content

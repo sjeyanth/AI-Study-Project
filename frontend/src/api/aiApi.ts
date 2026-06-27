@@ -4,6 +4,8 @@ import { apiClient } from './client'
 import type {
   BudgetInsightsResponse,
   EmailGenerationResponse,
+  StudyPlannerRequest,
+  StudyPlannerResponse,
   TaskBreakdownResponse,
   NoteSummaryResponse
 } from '../types/ai'
@@ -55,6 +57,17 @@ export const budgetInsights = async (
     {
       budget_summary: budgetSummary,
     }
+  )
+
+  return response.data
+}
+
+export const generateStudyPlan = async (
+  request: StudyPlannerRequest
+): Promise<StudyPlannerResponse> => {
+  const response = await apiClient.post(
+    '/ai/study-planner',
+    request
   )
 
   return response.data

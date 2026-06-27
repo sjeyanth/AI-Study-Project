@@ -3,6 +3,11 @@ from copy import error
 from  app.ai.services.note_ai_service import  summarize_notes_with_ai
 from  app.ai.services.email_ai_service import  generate_email_with_ai
 from  app.ai.services.task_breakdown_ai_service import task_breakdown_with_ai
+from app.ai.schemas.ai import StudyPlannerRequest, StudyPlannerResponse
+from app.ai.services.study_planner_ai_service import (
+    build_fallback_study_plan,
+    generate_study_plan_with_ai
+)
 
 
 def summarize_note(
@@ -77,6 +82,33 @@ def budget_insights(
         "Mock Insight: "
         "Monitor your spending and "
         "reduce unnecessary expenses."
+    )
+
+
+def study_planner(
+    request: StudyPlannerRequest
+) -> StudyPlannerResponse:
+
+    try:
+
+        plan = generate_study_plan_with_ai(
+            request
+        )
+        return StudyPlannerResponse(
+            **plan
+        )
+
+    except Exception as error:
+
+        print(
+            f"Study Planner AI Error: {error}"
+        )
+        plan = build_fallback_study_plan(
+            request
+        )
+
+    return StudyPlannerResponse(
+        **plan
     )
 
 

@@ -399,7 +399,16 @@ a {
 }
 
 .ai-page-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 20px;
+}
+
+.ai-header-action {
+  display: inline-flex;
+  align-items: center;
 }
 
 .ai-workspace {
@@ -546,6 +555,219 @@ a {
   gap: 20px;
 }
 
+.study-planner-header {
+  max-width: 880px;
+}
+
+.study-planner-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 440px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.study-planner-form p,
+.study-form-section > p {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+}
+
+.study-form-section {
+  display: grid;
+  gap: 12px;
+}
+
+.study-form-section h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.study-dynamic-list,
+.study-plan-stack,
+.daily-timeline,
+.timeline-sessions,
+.study-session-list,
+.study-duration-list,
+.revision-list {
+  display: grid;
+  gap: 12px;
+}
+
+.study-input-group {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.study-results {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.study-loading-state {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.loading-spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.weekly-schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.study-day-card {
+  display: grid;
+  gap: 10px;
+  min-height: 160px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.study-day-card-header,
+.timeline-session,
+.duration-row,
+.revision-row {
+  display: grid;
+  gap: 4px;
+}
+
+.study-day-card-header {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.study-day-card-header span,
+.timeline-session > span:last-child,
+.duration-row span,
+.revision-row span {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.study-session-pill {
+  display: grid;
+  gap: 3px;
+  padding: 10px;
+  border-left: 4px solid var(--primary);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.study-session-pill span,
+.study-session-pill p {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.timeline-day {
+  display: grid;
+  grid-template-columns: minmax(120px, 180px) minmax(0, 1fr);
+  gap: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.timeline-day:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.timeline-date {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+
+.timeline-date span,
+.timeline-session p,
+.duration-row p,
+.revision-row p,
+.study-explanation-card p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.timeline-session {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.session-type {
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: var(--primary);
+  background: rgba(37, 99, 235, 0.1);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.session-type-revision {
+  border-left-color: var(--success);
+}
+
+.session-type-assignment {
+  border-left-color: #7c3aed;
+}
+
+.session-type-break {
+  border-left-color: #f59e0b;
+}
+
+.study-result-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.study-priority-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.study-priority-list p {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+}
+
+.duration-row,
+.revision-row {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (max-width: 960px) {
   .ai-tools-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -553,6 +775,11 @@ a {
 }
 
 @media (max-width: 720px) {
+  .ai-page-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .ai-tools-grid {
     grid-template-columns: 1fr;
   }
@@ -790,5 +1017,12 @@ a {
   .resource-card-main,
   .goal-meta {
     flex-direction: column;
+  }
+
+  .study-planner-layout,
+  .study-result-grid,
+  .timeline-day,
+  .timeline-session {
+    grid-template-columns: 1fr;
   }
 }
