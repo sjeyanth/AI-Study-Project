@@ -28,7 +28,7 @@ def ask_nemotron(message: str) -> str:
             },
         ],
         temperature=0.3,
-        max_tokens=50,
+        max_tokens=300,
     )
 
     return response.choices[0].message.content
